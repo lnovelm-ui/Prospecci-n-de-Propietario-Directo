@@ -1,0 +1,775 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0">
+<title>Propuesta · Prospección Propietario Directo</title>
+<link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@300;400;500;600;700&family=DM+Mono:wght@400;500&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --teal: #0f8fa0;
+    --teal-dark: #0a6b7a;
+    --teal-deep: #0f4c5c;
+    --teal-light: #e8f6f8;
+    --white: #ffffff;
+    --off-white: #f7fbfc;
+    --text: #1a2e35;
+    --text-mid: #3d5a63;
+    --border: #d0e8ec;
+    --accent: #e8a020;
+  }
+
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+
+  body {
+    font-family: 'DM Sans', sans-serif;
+    background: var(--off-white);
+    color: var(--text);
+    line-height: 1.6;
+    -webkit-font-smoothing: antialiased;
+    font-size: 15px;
+  }
+
+  /* ── PORTADA ── */
+  .cover {
+    background: linear-gradient(160deg, var(--teal-deep) 0%, var(--teal) 70%, #1ab8cc 100%);
+    min-height: 100svh;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    padding: 40px 24px 32px;
+    position: relative;
+    overflow: hidden;
+  }
+
+  .cover::before {
+    content: '';
+    position: absolute;
+    top: -80px; right: -80px;
+    width: 280px; height: 280px;
+    border-radius: 50%;
+    background: rgba(255,255,255,0.04);
+    pointer-events: none;
+  }
+
+  .cover-logo {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+  }
+  .cover-logo-mark {
+    font-size: 32px;
+    font-weight: 700;
+    color: var(--white);
+    letter-spacing: -1px;
+    line-height: 1;
+  }
+  .cover-logo-text {
+    display: flex;
+    flex-direction: column;
+    color: rgba(255,255,255,0.8);
+    font-size: 10px;
+    font-weight: 500;
+    letter-spacing: 2px;
+    text-transform: uppercase;
+    line-height: 1.5;
+  }
+
+  .cover-body {
+    padding: 48px 0 24px;
+  }
+
+  .cover-eyebrow {
+    font-family: 'DM Mono', monospace;
+    font-size: 10px;
+    letter-spacing: 3px;
+    text-transform: uppercase;
+    color: rgba(255,255,255,0.5);
+    margin-bottom: 16px;
+  }
+
+  .cover-title {
+    font-size: 36px;
+    font-weight: 700;
+    color: var(--white);
+    line-height: 1.1;
+    letter-spacing: -1px;
+    margin-bottom: 20px;
+  }
+
+  .cover-title span {
+    display: block;
+    font-size: 15px;
+    font-weight: 300;
+    color: rgba(255,255,255,0.5);
+    letter-spacing: 0;
+    margin-top: 10px;
+    line-height: 1.5;
+  }
+
+  .cover-desc {
+    font-size: 15px;
+    color: rgba(255,255,255,0.68);
+    line-height: 1.7;
+    font-weight: 300;
+  }
+
+  .cover-footer {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    border-top: 1px solid rgba(255,255,255,0.15);
+    padding-top: 20px;
+    flex-wrap: wrap;
+    gap: 10px;
+  }
+
+  .cover-date {
+    font-family: 'DM Mono', monospace;
+    font-size: 10px;
+    color: rgba(255,255,255,0.4);
+    letter-spacing: 2px;
+    text-transform: uppercase;
+  }
+
+  .cover-tag {
+    background: rgba(255,255,255,0.12);
+    border: 1px solid rgba(255,255,255,0.2);
+    color: rgba(255,255,255,0.75);
+    font-size: 10px;
+    font-weight: 600;
+    letter-spacing: 1.5px;
+    text-transform: uppercase;
+    padding: 5px 12px;
+    border-radius: 4px;
+  }
+
+  /* ── SECCIONES GENÉRICAS ── */
+  .section {
+    padding: 48px 24px;
+  }
+
+  .section-label {
+    font-family: 'DM Mono', monospace;
+    font-size: 10px;
+    letter-spacing: 3px;
+    text-transform: uppercase;
+    color: var(--teal);
+    margin-bottom: 12px;
+    font-weight: 500;
+  }
+
+  .section-title {
+    font-size: 26px;
+    font-weight: 700;
+    color: var(--teal-deep);
+    line-height: 1.2;
+    letter-spacing: -0.5px;
+    margin-bottom: 16px;
+  }
+
+  .section-lead {
+    font-size: 15px;
+    color: var(--text-mid);
+    line-height: 1.75;
+    font-weight: 300;
+  }
+
+  .section-divider {
+    border: none;
+    border-top: 1px solid var(--border);
+  }
+
+  /* ── PROBLEMA ── */
+  .problem-bg { background: var(--teal-light); }
+
+  .problem-cards {
+    display: flex;
+    flex-direction: column;
+    gap: 16px;
+    margin-top: 28px;
+  }
+
+  .problem-card {
+    background: var(--white);
+    border: 1px solid var(--border);
+    border-radius: 12px;
+    padding: 22px 20px;
+    border-top: 3px solid var(--teal);
+  }
+
+  .problem-card-icon { font-size: 24px; margin-bottom: 10px; }
+  .problem-card-title {
+    font-size: 14px;
+    font-weight: 700;
+    color: var(--teal-deep);
+    margin-bottom: 6px;
+  }
+  .problem-card-text {
+    font-size: 13px;
+    color: var(--text-mid);
+    line-height: 1.65;
+  }
+
+  /* ── QUÉ ES ── */
+  .what-left p {
+    font-size: 15px;
+    color: var(--text-mid);
+    line-height: 1.75;
+    margin-bottom: 14px;
+  }
+
+  .what-right {
+    background: var(--teal-deep);
+    border-radius: 16px;
+    padding: 28px 24px;
+    margin-top: 28px;
+  }
+
+  .what-right-title {
+    font-family: 'DM Mono', monospace;
+    font-size: 10px;
+    letter-spacing: 2.5px;
+    text-transform: uppercase;
+    color: rgba(255,255,255,0.5);
+    margin-bottom: 18px;
+  }
+
+  .deliverable-item {
+    display: flex;
+    gap: 12px;
+    align-items: flex-start;
+    margin-bottom: 14px;
+  }
+
+  .deliverable-bullet {
+    width: 6px;
+    height: 6px;
+    border-radius: 50%;
+    background: var(--teal);
+    margin-top: 6px;
+    flex-shrink: 0;
+  }
+
+  .deliverable-text {
+    font-size: 14px;
+    color: rgba(255,255,255,0.78);
+    line-height: 1.5;
+  }
+
+  .deliverable-text strong { color: white; font-weight: 600; }
+
+  /* ── PROCESO ── */
+  .process-bg { background: var(--white); }
+
+  .steps {
+    display: flex;
+    flex-direction: column;
+    gap: 0;
+    margin-top: 28px;
+  }
+
+  .step {
+    display: flex;
+    gap: 16px;
+    align-items: flex-start;
+    padding: 20px 0;
+    border-bottom: 1px solid var(--border);
+    position: relative;
+  }
+  .step:last-child { border-bottom: none; }
+
+  .step-num {
+    width: 44px;
+    height: 44px;
+    min-width: 44px;
+    border-radius: 50%;
+    background: var(--teal);
+    color: white;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-family: 'DM Mono', monospace;
+    font-size: 13px;
+    font-weight: 500;
+  }
+
+  .step-content {}
+  .step-title {
+    font-size: 14px;
+    font-weight: 700;
+    color: var(--teal-deep);
+    margin-bottom: 4px;
+  }
+  .step-text {
+    font-size: 13px;
+    color: var(--text-mid);
+    line-height: 1.6;
+  }
+
+  /* ── PORTALES ── */
+  .portals-bg { background: var(--teal-light); }
+
+  .portal-tags {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 8px;
+    margin-top: 24px;
+  }
+
+  .portal-tag {
+    background: var(--white);
+    border: 1.5px solid var(--border);
+    color: var(--teal-deep);
+    font-size: 13px;
+    font-weight: 600;
+    padding: 7px 14px;
+    border-radius: 100px;
+  }
+
+  .portal-tag.primary {
+    background: var(--teal-deep);
+    border-color: var(--teal-deep);
+    color: white;
+  }
+
+  /* ── PRECIO ── */
+  .pricing-bg {
+    background: linear-gradient(160deg, var(--teal-deep) 0%, var(--teal) 100%);
+  }
+
+  .pricing-bg .section-label { color: rgba(255,255,255,0.5); }
+  .pricing-bg .section-title { color: white; }
+
+  .pricing-cards {
+    display: flex;
+    flex-direction: column;
+    gap: 16px;
+    margin-top: 28px;
+  }
+
+  .pricing-card {
+    background: rgba(255,255,255,0.09);
+    border: 1px solid rgba(255,255,255,0.15);
+    border-radius: 16px;
+    padding: 28px 24px;
+  }
+
+  .pricing-card.featured {
+    background: var(--white);
+    border-color: var(--white);
+  }
+
+  .pricing-card-label {
+    font-family: 'DM Mono', monospace;
+    font-size: 10px;
+    letter-spacing: 2.5px;
+    text-transform: uppercase;
+    color: rgba(255,255,255,0.5);
+    margin-bottom: 10px;
+  }
+  .pricing-card.featured .pricing-card-label { color: var(--teal); }
+
+  .pricing-amount {
+    font-size: 48px;
+    font-weight: 700;
+    color: white;
+    line-height: 1;
+    letter-spacing: -2px;
+    margin-bottom: 4px;
+  }
+  .pricing-card.featured .pricing-amount { color: var(--teal-deep); }
+
+  .pricing-period {
+    font-size: 13px;
+    color: rgba(255,255,255,0.5);
+    margin-bottom: 20px;
+    font-weight: 300;
+  }
+  .pricing-card.featured .pricing-period { color: var(--text-mid); }
+
+  .pricing-divider {
+    border: none;
+    border-top: 1px solid rgba(255,255,255,0.15);
+    margin: 16px 0;
+  }
+  .pricing-card.featured .pricing-divider { border-color: var(--border); }
+
+  .pricing-note {
+    font-size: 13px;
+    color: rgba(255,255,255,0.65);
+    line-height: 1.7;
+  }
+  .pricing-card.featured .pricing-note { color: var(--text-mid); }
+  .pricing-note strong { color: rgba(255,255,255,0.95); font-weight: 600; }
+  .pricing-card.featured .pricing-note strong { color: var(--teal-deep); }
+
+  .pricing-highlight {
+    display: inline-block;
+    background: rgba(232, 160, 32, 0.22);
+    color: var(--accent);
+    font-size: 10px;
+    font-weight: 700;
+    letter-spacing: 1.5px;
+    text-transform: uppercase;
+    padding: 4px 10px;
+    border-radius: 4px;
+    margin-bottom: 12px;
+  }
+
+  /* ── VALOR ── */
+  .value-bg { background: var(--white); }
+
+  .value-items {
+    display: flex;
+    flex-direction: column;
+    gap: 22px;
+    margin-top: 28px;
+  }
+
+  .value-item {
+    display: flex;
+    gap: 14px;
+    align-items: flex-start;
+  }
+
+  .value-icon {
+    width: 42px;
+    height: 42px;
+    min-width: 42px;
+    background: var(--teal-light);
+    border-radius: 10px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 18px;
+  }
+
+  .value-text-title {
+    font-size: 14px;
+    font-weight: 700;
+    color: var(--teal-deep);
+    margin-bottom: 3px;
+  }
+
+  .value-text-desc {
+    font-size: 13px;
+    color: var(--text-mid);
+    line-height: 1.6;
+  }
+
+  /* ── CTA ── */
+  .cta-bg {
+    background: var(--teal-light);
+    text-align: center;
+  }
+
+  .cta-box {
+    display: inline-flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 6px;
+    background: var(--teal-deep);
+    color: white;
+    border-radius: 16px;
+    padding: 28px 32px;
+    margin-top: 28px;
+    width: 100%;
+    max-width: 340px;
+  }
+
+  .cta-box-role {
+    font-size: 10px;
+    color: rgba(255,255,255,0.5);
+    font-family: 'DM Mono', monospace;
+    letter-spacing: 1.5px;
+    text-transform: uppercase;
+  }
+
+  .cta-box-name {
+    font-size: 20px;
+    font-weight: 700;
+  }
+
+  .cta-box-email {
+    font-size: 12px;
+    color: rgba(255,255,255,0.6);
+    margin-top: 6px;
+    line-height: 1.5;
+  }
+
+  /* ── DESKTOP OVERRIDES ── */
+  @media (min-width: 640px) {
+    .cover { padding: 56px 48px; }
+    .cover-title { font-size: 48px; }
+    .section { padding: 64px 48px; max-width: 860px; margin: 0 auto; }
+    .section-title { font-size: 32px; }
+    .problem-cards { flex-direction: row; }
+    .problem-card { flex: 1; }
+    .pricing-cards { flex-direction: row; }
+    .pricing-card { flex: 1; }
+    .value-items {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 24px;
+    }
+    .steps {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 0 24px;
+    }
+    .step { border-bottom: 1px solid var(--border); }
+  }
+</style>
+</head>
+<body>
+
+<!-- PORTADA -->
+<div class="cover">
+  <div class="cover-logo">
+    <div class="cover-logo-mark">DN</div>
+    <div class="cover-logo-text">
+      <span>DíazNovel</span>
+      <span>Inmobiliaria</span>
+    </div>
+  </div>
+
+  <div class="cover-body">
+    <div class="cover-eyebrow">Propuesta de Servicio</div>
+    <h1 class="cover-title">
+      Prospección de<br>Propietario Directo
+      <span>Activos Terciarios · Málaga y Axarquía</span>
+    </h1>
+    <p class="cover-desc">
+      Detección semanal de propietarios directos que ofrecen locales y naves fuera de la intermediación de agencias.
+    </p>
+  </div>
+
+  <div class="cover-footer">
+    <span class="cover-date">Servicio mensual · 2026</span>
+    <span class="cover-tag">Uso exclusivo interno</span>
+  </div>
+</div>
+
+<!-- EL PROBLEMA -->
+<div class="problem-bg">
+  <div class="section">
+    <div class="section-label">El contexto</div>
+    <h2 class="section-title">El propietario directo está en otros canales</h2>
+    <p class="section-lead">Los portales habituales muestran lo que ya gestionan las agencias. Los propietarios directos publican en otros canales y esperan una llamada que nunca llega.</p>
+
+    <div class="problem-cards">
+      <div class="problem-card">
+        <div class="problem-card-icon">⏱</div>
+        <div class="problem-card-title">Tiempo en portales = tiempo perdido</div>
+        <div class="problem-card-text">Revisar manualmente varios portales cada semana requiere horas que no se traducen en ingresos si no hay un sistema detrás.</div>
+      </div>
+      <div class="problem-card">
+        <div class="problem-card-icon">📞</div>
+        <div class="problem-card-title">El propietario directo es el mejor cliente</div>
+        <div class="problem-card-text">No tiene agencia, no ha firmado exclusiva. Si alguien llama primero con una propuesta profesional, la captación es posible.</div>
+      </div>
+      <div class="problem-card">
+        <div class="problem-card-icon">🎯</div>
+        <div class="problem-card-title">La ventaja está en llegar primero</div>
+        <div class="problem-card-text">La diferencia entre captar o no captar se mide en días. Una detección semanal sistemática genera esa ventaja.</div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<hr class="section-divider">
+
+<!-- QUÉ ES -->
+<div class="section">
+  <div class="section-label">El servicio</div>
+  <h2 class="section-title">Qué es y qué recibes cada semana</h2>
+
+  <div class="what-left">
+    <p>Una vez por semana, los lunes, se rastrean manualmente los portales activos buscando anuncios de propietarios directos que ofrecen locales y naves en Málaga capital y la Axarquía.</p>
+    <p>Cada anuncio pasa por un filtrado para eliminar agencias disfrazadas de particular, duplicados y activos sin datos útiles. Solo entra lo que es accionable.</p>
+    <p>El resultado es una lista limpia y estructurada. Sin ruido, sin trabajo previo. Abres el archivo y empiezas a llamar.</p>
+  </div>
+
+  <div class="what-right">
+    <div class="what-right-title">Entregable semanal — campos incluidos</div>
+    <div class="deliverable-item"><div class="deliverable-bullet"></div><div class="deliverable-text"><strong>Portal de origen</strong> — dónde se detectó el anuncio</div></div>
+    <div class="deliverable-item"><div class="deliverable-bullet"></div><div class="deliverable-text"><strong>Tipo de activo</strong> — local comercial o nave industrial</div></div>
+    <div class="deliverable-item"><div class="deliverable-bullet"></div><div class="deliverable-text"><strong>Zona / Municipio</strong> — Málaga capital o Axarquía</div></div>
+    <div class="deliverable-item"><div class="deliverable-bullet"></div><div class="deliverable-text"><strong>Superficie y precio</strong> — venta o alquiler mensual</div></div>
+    <div class="deliverable-item"><div class="deliverable-bullet"></div><div class="deliverable-text"><strong>Contacto directo</strong> — teléfono cuando está disponible</div></div>
+    <div class="deliverable-item"><div class="deliverable-bullet"></div><div class="deliverable-text"><strong>Enlace al anuncio</strong> — acceso directo con un clic</div></div>
+    <div class="deliverable-item"><div class="deliverable-bullet"></div><div class="deliverable-text"><strong>Observaciones</strong> — urgencia, estado, muelle de carga, acceso…</div></div>
+  </div>
+</div>
+
+<hr class="section-divider">
+
+<!-- PROCESO -->
+<div class="process-bg">
+  <div class="section">
+    <div class="section-label">Proceso</div>
+    <h2 class="section-title">Cómo funciona cada semana</h2>
+
+    <div class="steps">
+      <div class="step">
+        <div class="step-num">01</div>
+        <div class="step-content">
+          <div class="step-title">Rastreo de portales</div>
+          <div class="step-text">Revisión manual de todos los canales activos buscando anuncios nuevos de propietario directo en terciario.</div>
+        </div>
+      </div>
+      <div class="step">
+        <div class="step-num">02</div>
+        <div class="step-content">
+          <div class="step-title">Filtrado y depuración</div>
+          <div class="step-text">Se eliminan agencias, duplicados y anuncios sin datos útiles. Solo entra lo que es accionable.</div>
+        </div>
+      </div>
+      <div class="step">
+        <div class="step-num">03</div>
+        <div class="step-content">
+          <div class="step-title">Entrega del informe</div>
+          <div class="step-text">Excel limpio y estructurado con todos los campos, listo para actuar cada lunes.</div>
+        </div>
+      </div>
+      <div class="step">
+        <div class="step-num">04</div>
+        <div class="step-content">
+          <div class="step-title">Tú llamas primero</div>
+          <div class="step-text">El agente contacta al propietario con ventaja temporal y propuesta de captación en exclusiva.</div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<hr class="section-divider">
+
+<!-- PORTALES -->
+<div class="portals-bg">
+  <div class="section">
+    <div class="section-label">Cobertura</div>
+    <h2 class="section-title">Portales monitorizados</h2>
+    <p class="section-lead">Los de fondo oscuro son los de mayor rendimiento para locales y naves en Málaga.</p>
+
+    <div class="portal-tags">
+      <span class="portal-tag primary">Milanuncios</span>
+      <span class="portal-tag primary">Wallapop</span>
+      <span class="portal-tag primary">Locales.es</span>
+      <span class="portal-tag primary">LoopNet</span>
+      <span class="portal-tag">Fotocasa</span>
+      <span class="portal-tag">Habitaclia</span>
+      <span class="portal-tag">Yaencontre</span>
+      <span class="portal-tag">Indomio</span>
+      <span class="portal-tag">Facebook Marketplace</span>
+      <span class="portal-tag">Pisos.com</span>
+    </div>
+  </div>
+</div>
+
+<!-- PRECIO -->
+<div class="pricing-bg">
+  <div class="section">
+    <div class="section-label">Inversión</div>
+    <h2 class="section-title">Estructura de honorarios</h2>
+
+    <div class="pricing-cards">
+      <div class="pricing-card featured">
+        <div class="pricing-card-label">Cuota fija mensual</div>
+        <div class="pricing-amount">150€</div>
+        <div class="pricing-period">/ mes · pago mensual</div>
+        <hr class="pricing-divider">
+        <p class="pricing-note">
+          Incluye rastreo semanal, filtrado y entrega del informe Excel cada lunes.<br><br>
+          <strong>Sin permanencia mínima.</strong> Pausable con un mes de preaviso.
+        </p>
+      </div>
+
+      <div class="pricing-card">
+        <div class="pricing-card-label">Variable por operación cerrada</div>
+        <div class="pricing-highlight">Éxito compartido</div>
+        <div class="pricing-amount">10%</div>
+        <div class="pricing-period">sobre honorarios netos del agente</div>
+        <hr class="pricing-divider">
+        <p class="pricing-note">
+          Solo cuando se cierre una operación sobre un activo captado a partir de un lead del informe semanal.<br><br>
+          <strong>Ejemplo:</strong> honorarios de 3.000€ → variable de 300€.
+        </p>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- VALOR -->
+<div class="value-bg">
+  <div class="section">
+    <div class="section-label">Por qué tiene sentido</div>
+    <h2 class="section-title">Lo que este servicio cambia en el negocio</h2>
+
+    <div class="value-items">
+      <div class="value-item">
+        <div class="value-icon">📡</div>
+        <div>
+          <div class="value-text-title">Captación continua sin esfuerzo</div>
+          <div class="value-text-desc">Oportunidades nuevas cada semana sin dedicar tiempo a buscarlas. El tiempo libre se invierte en llamadas y cierre.</div>
+        </div>
+      </div>
+      <div class="value-item">
+        <div class="value-icon">🔒</div>
+        <div>
+          <div class="value-text-title">Acceso antes que la competencia</div>
+          <div class="value-text-desc">Contactas al propietario en los primeros días del anuncio, antes de que otra agencia lo haga.</div>
+        </div>
+      </div>
+      <div class="value-item">
+        <div class="value-icon">📊</div>
+        <div>
+          <div class="value-text-title">Base de datos propia con el tiempo</div>
+          <div class="value-text-desc">El histórico semanal se convierte en un mapa de propietarios y activos que ningún portal proporciona.</div>
+        </div>
+      </div>
+      <div class="value-item">
+        <div class="value-icon">⚡</div>
+        <div>
+          <div class="value-text-title">Especialización en terciario</div>
+          <div class="value-text-desc">Filtrado calibrado para locales y naves. Sin ruido, sin vivienda. Perímetro claro y resultado directo.</div>
+        </div>
+      </div>
+      <div class="value-item">
+        <div class="value-icon">💡</div>
+        <div>
+          <div class="value-text-title">Coste fijo predecible</div>
+          <div class="value-text-desc">Con una sola operación adicional al año, la inversión anual queda sobradamente cubierta.</div>
+        </div>
+      </div>
+      <div class="value-item">
+        <div class="value-icon">🤝</div>
+        <div>
+          <div class="value-text-title">Sin estructura adicional</div>
+          <div class="value-text-desc">Sin personal, sin herramientas extra. El entregable es un Excel. Simple, portable y accionable.</div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- CTA -->
+<div class="cta-bg">
+  <div class="section" style="text-align:center">
+    <div class="section-label">Siguiente paso</div>
+    <h2 class="section-title">Arrancamos cuando quieras</h2>
+    <p class="section-lead" style="margin: 0 auto;">El primer informe semanal se entrega el lunes siguiente al inicio. Sin configuraciones previas, sin curva de aprendizaje.</p>
+
+    <div style="display:flex; justify-content:center">
+      <div class="cta-box">
+        <div class="cta-box-role">Servicio gestionado por</div>
+        <div class="cta-box-name">Laura Novel</div>
+        <div class="cta-box-email">Prospección digital · Activos terciarios Málaga</div>
+      </div>
+    </div>
+  </div>
+</div>
+
+</body>
+</html>
