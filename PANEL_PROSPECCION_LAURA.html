@@ -1,0 +1,1088 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Panel Prospección · DíazNovel</title>
+<link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@300;400;500;600;700;800&family=DM+Mono:wght@400;500&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --teal:       #0f8fa0;
+    --teal-dark:  #0a6b7a;
+    --teal-deep:  #0f4c5c;
+    --teal-light: #e8f6f8;
+    --teal-xlight:#f0fafc;
+    --white:      #ffffff;
+    --off-white:  #f4f9fb;
+    --text:       #1a2e35;
+    --text-mid:   #3d5a63;
+    --muted:      #7a9aa3;
+    --border:     #cde5eb;
+    --border2:    #a8d4dc;
+    --accent:     #e8a020;
+    --accent-lt:  #fdf3e3;
+    --green:      #10b981;
+    --green-lt:   #ecfdf5;
+    --red:        #ef4444;
+    --red-lt:     #fef2f2;
+    --shadow:     0 2px 12px rgba(15,76,92,0.08);
+    --shadow-md:  0 6px 24px rgba(15,76,92,0.13);
+  }
+
+  * { margin:0; padding:0; box-sizing:border-box; }
+
+  body {
+    font-family: 'DM Sans', sans-serif;
+    background: var(--off-white);
+    color: var(--text);
+    min-height: 100vh;
+    -webkit-font-smoothing: antialiased;
+  }
+
+  /* ── HEADER ── */
+  header {
+    background: linear-gradient(135deg, var(--teal-deep) 0%, var(--teal) 100%);
+    padding: 0 32px;
+    height: 62px;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    box-shadow: 0 2px 16px rgba(15,76,92,0.2);
+    position: sticky;
+    top: 0;
+    z-index: 100;
+  }
+
+  .header-left {
+    display: flex;
+    align-items: center;
+    gap: 16px;
+  }
+
+  .logo-mark {
+    font-size: 22px;
+    font-weight: 800;
+    color: white;
+    letter-spacing: -1px;
+    line-height: 1;
+  }
+
+  .logo-sep {
+    width: 1px;
+    height: 24px;
+    background: rgba(255,255,255,0.25);
+  }
+
+  .header-title {
+    font-size: 13px;
+    font-weight: 700;
+    color: rgba(255,255,255,0.9);
+    letter-spacing: 0.2px;
+  }
+
+  .header-sub {
+    font-size: 11px;
+    color: rgba(255,255,255,0.5);
+    font-family: 'DM Mono', monospace;
+    letter-spacing: 1px;
+  }
+
+  .header-right {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+  }
+
+  .session-badge {
+    background: rgba(255,255,255,0.12);
+    border: 1px solid rgba(255,255,255,0.2);
+    border-radius: 20px;
+    padding: 5px 14px;
+    font-size: 12px;
+    font-weight: 600;
+    color: rgba(255,255,255,0.85);
+    font-family: 'DM Mono', monospace;
+  }
+
+  .btn-reset {
+    background: rgba(255,255,255,0.1);
+    border: 1px solid rgba(255,255,255,0.2);
+    border-radius: 8px;
+    padding: 6px 14px;
+    font-size: 12px;
+    font-weight: 600;
+    color: rgba(255,255,255,0.8);
+    cursor: pointer;
+    font-family: 'DM Sans', sans-serif;
+    transition: background 0.15s;
+  }
+  .btn-reset:hover { background: rgba(255,255,255,0.18); }
+
+  /* ── MAIN ── */
+  main {
+    max-width: 1100px;
+    margin: 0 auto;
+    padding: 28px 24px 60px;
+  }
+
+  /* ── PROGRESS BAR ── */
+  .progress-section {
+    background: var(--white);
+    border: 1px solid var(--border);
+    border-radius: 14px;
+    padding: 20px 24px;
+    margin-bottom: 24px;
+    box-shadow: var(--shadow);
+  }
+
+  .progress-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 14px;
+  }
+
+  .progress-title {
+    font-size: 13px;
+    font-weight: 700;
+    color: var(--teal-deep);
+  }
+
+  .progress-count {
+    font-family: 'DM Mono', monospace;
+    font-size: 12px;
+    color: var(--muted);
+  }
+
+  .progress-track {
+    height: 8px;
+    background: var(--teal-light);
+    border-radius: 100px;
+    overflow: hidden;
+  }
+
+  .progress-fill {
+    height: 100%;
+    background: linear-gradient(90deg, var(--teal) 0%, var(--teal-dark) 100%);
+    border-radius: 100px;
+    transition: width 0.4s ease;
+    width: 0%;
+  }
+
+  .progress-steps {
+    display: flex;
+    gap: 6px;
+    margin-top: 12px;
+    flex-wrap: wrap;
+  }
+
+  .step-dot {
+    width: 8px;
+    height: 8px;
+    border-radius: 50%;
+    background: var(--border);
+    transition: background 0.2s;
+  }
+  .step-dot.done { background: var(--teal); }
+  .step-dot.skip { background: var(--muted); opacity: 0.4; }
+
+  /* ── SECTION LABEL ── */
+  .section-label {
+    font-family: 'DM Mono', monospace;
+    font-size: 10px;
+    letter-spacing: 3px;
+    text-transform: uppercase;
+    color: var(--teal);
+    font-weight: 500;
+    margin-bottom: 10px;
+    margin-top: 28px;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+  }
+  .section-label::after {
+    content: '';
+    flex: 1;
+    height: 1px;
+    background: var(--border);
+  }
+
+  /* ── PORTAL GRID ── */
+  .portal-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(320px, 1fr));
+    gap: 14px;
+  }
+
+  /* ── PORTAL CARD ── */
+  .portal-card {
+    background: var(--white);
+    border: 1.5px solid var(--border);
+    border-radius: 14px;
+    overflow: hidden;
+    box-shadow: var(--shadow);
+    transition: box-shadow 0.15s, border-color 0.15s, transform 0.15s;
+  }
+  .portal-card:hover {
+    box-shadow: var(--shadow-md);
+    transform: translateY(-1px);
+  }
+  .portal-card.done {
+    border-color: var(--teal);
+    background: var(--teal-xlight);
+  }
+  .portal-card.skipped {
+    border-color: var(--border);
+    opacity: 0.55;
+  }
+
+  .card-header {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    padding: 16px 18px 12px;
+    border-bottom: 1px solid var(--border);
+  }
+
+  .card-icon {
+    width: 40px;
+    height: 40px;
+    border-radius: 10px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 20px;
+    flex-shrink: 0;
+  }
+
+  .card-meta { flex: 1; min-width: 0; }
+
+  .card-name {
+    font-size: 14px;
+    font-weight: 800;
+    color: var(--teal-deep);
+    letter-spacing: -0.2px;
+  }
+
+  .card-desc {
+    font-size: 11px;
+    color: var(--muted);
+    margin-top: 1px;
+  }
+
+  .card-priority {
+    font-family: 'DM Mono', monospace;
+    font-size: 9px;
+    font-weight: 500;
+    letter-spacing: 1.5px;
+    text-transform: uppercase;
+    padding: 3px 8px;
+    border-radius: 20px;
+  }
+  .p-alta { background: #dcfce7; color: #166534; }
+  .p-media { background: #fef9c3; color: #854d0e; }
+  .p-social { background: #ede9fe; color: #5b21b6; }
+
+  .card-searches {
+    padding: 12px 18px;
+    display: flex;
+    flex-direction: column;
+    gap: 6px;
+  }
+
+  .search-row {
+    display: flex;
+    gap: 6px;
+    align-items: center;
+  }
+
+  .search-tag {
+    font-size: 11px;
+    font-weight: 500;
+    color: var(--text-mid);
+    background: var(--teal-light);
+    border: 1px solid var(--border);
+    border-radius: 6px;
+    padding: 3px 8px;
+    white-space: nowrap;
+  }
+  .search-tag.nave { background: #fff7ed; border-color: #fed7aa; color: #92400e; }
+  .search-tag.alquiler { background: #ede9fe; border-color: #ddd6fe; color: #5b21b6; }
+  .search-tag.venta { background: #dcfce7; border-color: #bbf7d0; color: #166534; }
+
+  .card-footer {
+    padding: 10px 18px 14px;
+    display: flex;
+    gap: 8px;
+    flex-wrap: wrap;
+  }
+
+  .btn-search {
+    flex: 1;
+    min-width: 100px;
+    padding: 9px 12px;
+    border-radius: 8px;
+    border: none;
+    background: var(--teal);
+    color: white;
+    font-size: 12px;
+    font-weight: 700;
+    cursor: pointer;
+    font-family: 'DM Sans', sans-serif;
+    text-decoration: none;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 5px;
+    transition: background 0.15s;
+  }
+  .btn-search:hover { background: var(--teal-dark); }
+  .btn-search.secondary {
+    background: var(--teal-light);
+    color: var(--teal-deep);
+    border: 1.5px solid var(--border);
+  }
+  .btn-search.secondary:hover { background: var(--border); }
+
+  .btn-done {
+    padding: 9px 14px;
+    border-radius: 8px;
+    border: 1.5px solid var(--border);
+    background: var(--white);
+    color: var(--muted);
+    font-size: 12px;
+    font-weight: 700;
+    cursor: pointer;
+    font-family: 'DM Sans', sans-serif;
+    transition: all 0.15s;
+    white-space: nowrap;
+  }
+  .btn-done:hover { border-color: var(--teal); color: var(--teal); }
+  .portal-card.done .btn-done {
+    background: var(--teal);
+    border-color: var(--teal);
+    color: white;
+  }
+
+  .btn-skip {
+    padding: 9px 10px;
+    border-radius: 8px;
+    border: 1.5px solid var(--border);
+    background: var(--white);
+    color: var(--muted);
+    font-size: 12px;
+    cursor: pointer;
+    font-family: 'DM Sans', sans-serif;
+    transition: all 0.15s;
+  }
+  .btn-skip:hover { border-color: var(--red); color: var(--red); }
+
+  /* ── NOTAS PORTAL ── */
+  .card-notes {
+    padding: 0 18px 12px;
+  }
+  .notes-input {
+    width: 100%;
+    padding: 7px 10px;
+    border-radius: 7px;
+    border: 1.5px solid var(--border);
+    font-size: 12px;
+    font-family: 'DM Sans', sans-serif;
+    color: var(--text);
+    background: var(--off-white);
+    resize: none;
+    outline: none;
+    transition: border-color 0.15s;
+    min-height: 48px;
+  }
+  .notes-input:focus { border-color: var(--teal); background: white; }
+  .notes-label {
+    font-size: 10px;
+    font-weight: 700;
+    color: var(--muted);
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+    margin-bottom: 4px;
+  }
+
+  /* ── ALERTAS GOOGLE ── */
+  .alert-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+    gap: 10px;
+  }
+
+  .alert-card {
+    background: var(--white);
+    border: 1.5px solid var(--border);
+    border-radius: 12px;
+    padding: 14px 16px;
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    box-shadow: var(--shadow);
+  }
+
+  .alert-icon {
+    width: 36px;
+    height: 36px;
+    background: var(--accent-lt);
+    border-radius: 8px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 16px;
+    flex-shrink: 0;
+  }
+
+  .alert-term {
+    font-size: 13px;
+    font-weight: 700;
+    color: var(--teal-deep);
+    margin-bottom: 2px;
+  }
+
+  .alert-desc {
+    font-size: 11px;
+    color: var(--muted);
+  }
+
+  .btn-alert {
+    margin-left: auto;
+    padding: 6px 12px;
+    border-radius: 7px;
+    border: 1.5px solid var(--border);
+    background: var(--white);
+    color: var(--teal);
+    font-size: 11px;
+    font-weight: 700;
+    cursor: pointer;
+    font-family: 'DM Sans', sans-serif;
+    white-space: nowrap;
+    text-decoration: none;
+    transition: all 0.15s;
+    flex-shrink: 0;
+  }
+  .btn-alert:hover { background: var(--teal-light); border-color: var(--teal); }
+
+  /* ── RESUMEN SESIÓN ── */
+  .resumen-card {
+    background: var(--teal-deep);
+    border-radius: 14px;
+    padding: 24px 28px;
+    color: white;
+    margin-top: 10px;
+  }
+
+  .resumen-title {
+    font-size: 13px;
+    font-weight: 800;
+    color: rgba(255,255,255,0.6);
+    text-transform: uppercase;
+    letter-spacing: 1.5px;
+    font-family: 'DM Mono', monospace;
+    margin-bottom: 16px;
+  }
+
+  .resumen-grid {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: 16px;
+    margin-bottom: 20px;
+  }
+
+  .resumen-stat { text-align: center; }
+  .resumen-num {
+    font-size: 36px;
+    font-weight: 800;
+    line-height: 1;
+    letter-spacing: -1px;
+  }
+  .resumen-lbl {
+    font-size: 11px;
+    color: rgba(255,255,255,0.5);
+    margin-top: 4px;
+  }
+
+  .btn-exportar {
+    width: 100%;
+    padding: 12px;
+    border-radius: 10px;
+    border: 1.5px solid rgba(255,255,255,0.25);
+    background: rgba(255,255,255,0.1);
+    color: white;
+    font-size: 13px;
+    font-weight: 700;
+    cursor: pointer;
+    font-family: 'DM Sans', sans-serif;
+    transition: background 0.15s;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 8px;
+  }
+  .btn-exportar:hover { background: rgba(255,255,255,0.18); }
+
+  /* ── GRUPOS FACEBOOK ── */
+  .group-list {
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+  }
+
+  .group-item {
+    background: var(--white);
+    border: 1.5px solid var(--border);
+    border-radius: 10px;
+    padding: 12px 16px;
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    box-shadow: var(--shadow);
+    transition: border-color 0.15s;
+  }
+  .group-item:hover { border-color: var(--teal); }
+
+  .group-icon {
+    width: 34px;
+    height: 34px;
+    background: #e8f0fe;
+    border-radius: 8px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 16px;
+    flex-shrink: 0;
+  }
+
+  .group-name {
+    font-size: 13px;
+    font-weight: 700;
+    color: var(--teal-deep);
+  }
+  .group-desc { font-size: 11px; color: var(--muted); margin-top: 1px; }
+
+  .btn-group {
+    margin-left: auto;
+    padding: 6px 12px;
+    border-radius: 7px;
+    border: none;
+    background: #1877f2;
+    color: white;
+    font-size: 11px;
+    font-weight: 700;
+    cursor: pointer;
+    font-family: 'DM Sans', sans-serif;
+    text-decoration: none;
+    white-space: nowrap;
+    flex-shrink: 0;
+  }
+
+  /* ── TIPS ── */
+  .tip-box {
+    background: var(--accent-lt);
+    border: 1.5px solid #fcd34d;
+    border-radius: 10px;
+    padding: 12px 16px;
+    display: flex;
+    gap: 10px;
+    align-items: flex-start;
+    margin-top: 8px;
+  }
+  .tip-icon { font-size: 16px; flex-shrink: 0; margin-top: 1px; }
+  .tip-text { font-size: 12px; color: #78350f; line-height: 1.6; }
+  .tip-text strong { font-weight: 700; }
+
+  /* ── TIEMPO ── */
+  .time-badge {
+    display: inline-flex;
+    align-items: center;
+    gap: 4px;
+    font-family: 'DM Mono', monospace;
+    font-size: 10px;
+    color: var(--muted);
+    background: var(--off-white);
+    border: 1px solid var(--border);
+    border-radius: 20px;
+    padding: 3px 9px;
+    margin-left: auto;
+  }
+
+  @media (max-width: 640px) {
+    main { padding: 16px 12px 40px; }
+    .portal-grid { grid-template-columns: 1fr; }
+    .resumen-grid { grid-template-columns: repeat(2,1fr); }
+    header { padding: 0 16px; }
+  }
+</style>
+</head>
+<body>
+
+<header>
+  <div class="header-left">
+    <div class="logo-mark">DN</div>
+    <div class="logo-sep"></div>
+    <div>
+      <div class="header-title">Panel de Prospección</div>
+      <div class="header-sub">Sesión semanal · DíazNovel Inmobiliaria</div>
+    </div>
+  </div>
+  <div class="header-right">
+    <div class="session-badge" id="fechaHoy">—</div>
+    <button class="btn-reset" onclick="resetSesion()">↺ Nueva sesión</button>
+  </div>
+</header>
+
+<main>
+
+  <!-- PROGRESO -->
+  <div class="progress-section">
+    <div class="progress-header">
+      <div class="progress-title">Progreso de la sesión</div>
+      <div class="progress-count"><span id="countDone">0</span> de <span id="countTotal">0</span> fuentes revisadas</div>
+    </div>
+    <div class="progress-track">
+      <div class="progress-fill" id="progressFill"></div>
+    </div>
+    <div class="progress-steps" id="progressDots"></div>
+  </div>
+
+  <!-- TIER 1: PORTALES PRIORITARIOS -->
+  <div class="section-label">
+    Tier 1 — Mayor concentración de propietario directo
+    <span class="time-badge">⏱ ~60 min estimado</span>
+  </div>
+
+  <div class="portal-grid" id="portalGrid">
+    <!-- Cards generadas por JS -->
+  </div>
+
+  <!-- TIER 2: PORTALES SECUNDARIOS -->
+  <div class="section-label">
+    Tier 2 — Revisión rápida
+    <span class="time-badge">⏱ ~20 min estimado</span>
+  </div>
+
+  <div class="portal-grid" id="portalGrid2"></div>
+
+  <!-- GRUPOS FACEBOOK -->
+  <div class="section-label">
+    Grupos de Facebook — Propietario directo sin portal
+    <span class="time-badge">⏱ ~15 min estimado</span>
+  </div>
+
+  <div class="tip-box" style="margin-bottom:12px">
+    <div class="tip-icon">💡</div>
+    <div class="tip-text"><strong>Cómo trabajar los grupos:</strong> Entra en cada grupo, ordena por "Publicaciones nuevas" y busca manualmente "local", "nave", "alquiler", "vendo". No publiques nada — solo observa y anota los que sean propietario directo.</div>
+  </div>
+
+  <div class="group-list" id="groupList"></div>
+
+  <!-- ALERTAS GOOGLE -->
+  <div class="section-label">
+    Alertas de Google — Configurar una sola vez
+    <span class="time-badge">⏱ 10 min configuración única</span>
+  </div>
+
+  <div class="tip-box" style="margin-bottom:12px">
+    <div class="tip-icon">⚡</div>
+    <div class="tip-text"><strong>Automatización real:</strong> Estas alertas se configuran una vez en <strong>google.es/alerts</strong> y Google te manda email cuando aparece contenido nuevo. No tienes que hacer nada más — llegan solas a tu bandeja.</div>
+  </div>
+
+  <div class="alert-grid" id="alertGrid"></div>
+
+  <!-- RESUMEN SESIÓN -->
+  <div class="section-label">Resumen de la sesión</div>
+
+  <div class="resumen-card">
+    <div class="resumen-title">📊 Estadísticas · Sesión actual</div>
+    <div class="resumen-grid">
+      <div class="resumen-stat">
+        <div class="resumen-num" id="rFuentes">0</div>
+        <div class="resumen-lbl">Fuentes revisadas</div>
+      </div>
+      <div class="resumen-stat">
+        <div class="resumen-num" id="rLeads" style="color:#fbbf24">0</div>
+        <div class="resumen-lbl">Leads anotados</div>
+      </div>
+      <div class="resumen-stat">
+        <div class="resumen-num" id="rTiempo" style="color:#6ee7b7">0'</div>
+        <div class="resumen-lbl">Tiempo sesión</div>
+      </div>
+      <div class="resumen-stat">
+        <div class="resumen-num" id="rPendientes" style="color:#fca5a5">0</div>
+        <div class="resumen-lbl">Pendientes</div>
+      </div>
+    </div>
+    <div style="display:flex;gap:10px">
+      <button class="btn-exportar" onclick="exportarResumen()">📋 Exportar resumen de sesión</button>
+      <button class="btn-exportar" onclick="abrirCRM()" style="background:rgba(255,255,255,0.15)">🔗 Ir al CRM</button>
+    </div>
+  </div>
+
+</main>
+
+<script>
+// ── DATOS DE PORTALES ────────────────────────────────────────────────────────
+const PORTALES_T1 = [
+  {
+    id: 'milanuncios',
+    nombre: 'Milanuncios',
+    desc: 'Mayor volumen propietario directo terciario',
+    icon: '📋',
+    iconBg: '#fef3c7',
+    priority: 'alta',
+    tiempo: '15 min',
+    searches: [
+      { label: 'Locales · venta · Málaga · Particulares', tag: 'local venta', url: 'https://www.milanuncios.com/venta-de-locales-comerciales-en-malaga/?vendedor=particular' },
+      { label: 'Locales · alquiler · Málaga · Particulares', tag: 'local alquiler', url: 'https://www.milanuncios.com/alquiler-de-locales-comerciales-en-malaga/?vendedor=particular' },
+      { label: 'Naves · venta · Málaga · Particulares', tag: 'nave venta', url: 'https://www.milanuncios.com/venta-de-naves-industriales-en-malaga/?vendedor=particular' },
+      { label: 'Naves · alquiler · Málaga · Particulares', tag: 'nave alquiler', url: 'https://www.milanuncios.com/alquiler-de-naves-industriales-en-malaga/?vendedor=particular' },
+      { label: 'Oficinas · venta · Málaga · Particulares', tag: 'oficina venta', url: 'https://www.milanuncios.com/venta-de-oficinas-en-malaga/?vendedor=particular' },
+      { label: 'Oficinas · alquiler · Málaga · Particulares', tag: 'oficina alquiler', url: 'https://www.milanuncios.com/alquiler-de-oficinas-en-malaga/?vendedor=particular' },
+      { label: 'Locales + naves · Axarquía (Vélez-Málaga)', tag: 'local venta', url: 'https://www.milanuncios.com/locales-comerciales-en-velez-malaga-malaga/?vendedor=particular' },
+    ],
+    tip: 'El parámetro ?vendedor=particular ya filtra solo particulares. Si aparece el texto "Ref:" en un anuncio casi seguro es agencia — sáltalo.',
+  },
+  {
+    id: 'wallapop',
+    nombre: 'Wallapop',
+    desc: 'Nave pequeña, local de barrio, propietario directo',
+    icon: '🛍',
+    iconBg: '#fce7f3',
+    priority: 'alta',
+    tiempo: '12 min',
+    searches: [
+      { label: 'Locales · Málaga (venta + alquiler)', tag: 'local', url: 'https://es.wallapop.com/inmobiliaria/locales/malaga' },
+      { label: 'Naves · alquiler · Málaga', tag: 'nave alquiler', url: 'https://es.wallapop.com/inmobiliaria/alquilar-nave/malaga' },
+      { label: 'Oficinas · Málaga', tag: 'oficina', url: 'https://es.wallapop.com/inmobiliaria/oficinas/malaga' },
+      { label: 'Traspasos · Málaga', tag: 'traspaso', url: 'https://es.wallapop.com/inmobiliaria/traspaso/malaga' },
+    ],
+    tip: 'Wallapop solo tiene particulares por defecto — no hay agencias activas aquí. Los traspasos son oro: propietario que quiere salir rápido sin negociación larga.',
+  },
+  {
+    id: 'locales',
+    nombre: 'Locales.es',
+    desc: 'Especializado en terciario, buen ratio propietario',
+    icon: '🏪',
+    iconBg: '#d1fae5',
+    priority: 'alta',
+    tiempo: '10 min',
+    searches: [
+      { label: 'Locales · venta · Málaga', tag: 'local venta', url: 'https://www.locales.es/venta-de-locales/malaga/' },
+      { label: 'Locales · alquiler · Málaga', tag: 'local alquiler', url: 'https://www.locales.es/alquiler-de-locales/malaga/' },
+      { label: 'Naves · venta · Málaga', tag: 'nave venta', url: 'https://www.locales.es/venta-de-naves/malaga/' },
+      { label: 'Naves · alquiler · Málaga', tag: 'nave alquiler', url: 'https://www.locales.es/alquiler-de-naves/malaga/' },
+      { label: 'Oficinas · Málaga', tag: 'oficina', url: 'https://www.locales.es/alquiler-de-oficinas/malaga/' },
+    ],
+    tip: 'Una vez dentro usa el filtro "Particular" en la columna izquierda. Precio fuera de mercado = propietario sin asesoramiento = oportunidad de captación.',
+  },
+  {
+    id: 'loopnet',
+    nombre: 'LoopNet',
+    desc: 'Ticket alto · naves logísticas · oficinas',
+    icon: '🏭',
+    iconBg: '#e0e7ff',
+    priority: 'alta',
+    tiempo: '10 min',
+    searches: [
+      { label: 'Naves · venta · Málaga', tag: 'nave venta', url: 'https://www.loopnet.es/buscar/naves-industriales-en-venta/malaga-malaga/' },
+      { label: 'Naves · alquiler · Málaga', tag: 'nave alquiler', url: 'https://www.loopnet.es/buscar/naves-industriales-en-alquiler/malaga-malaga/' },
+      { label: 'Locales · venta · Málaga', tag: 'local venta', url: 'https://www.loopnet.es/buscar/locales-comerciales-en-venta/malaga-malaga/' },
+      { label: 'Locales · alquiler · Málaga', tag: 'local alquiler', url: 'https://www.loopnet.es/buscar/locales-comerciales-en-alquiler/malaga-malaga/' },
+      { label: 'Oficinas · Málaga', tag: 'oficina', url: 'https://www.loopnet.es/buscar/oficinas-en-venta/malaga-malaga/' },
+      { label: 'Axarquía · Vélez-Málaga · naves', tag: 'nave', url: 'https://www.loopnet.es/buscar/naves-industriales-en-venta/velez-malaga-malaga/' },
+    ],
+    tip: 'En LoopNet no hay filtro de particular pero se detecta fácil: sin logo corporativo, descripción corta, precio redondo por m². Esos son los tuyos.',
+  },
+];
+
+const PORTALES_T2 = [
+  {
+    id: 'habitaclia',
+    nombre: 'Habitaclia',
+    desc: 'Presencia andaluza creciente',
+    icon: '🏢',
+    iconBg: '#fef3c7',
+    priority: 'media',
+    tiempo: '8 min',
+    searches: [
+      { label: 'Locales · venta · Málaga', tag: 'local venta', url: 'https://www.habitaclia.com/venta-locales-en-malaga.htm' },
+      { label: 'Locales · alquiler · Málaga', tag: 'local alquiler', url: 'https://www.habitaclia.com/alquiler-locales-en-malaga.htm' },
+      { label: 'Naves · alquiler · Málaga', tag: 'nave alquiler', url: 'https://www.habitaclia.com/alquiler-naves-en-malaga.htm' },
+      { label: 'Oficinas · alquiler · Málaga', tag: 'oficina', url: 'https://www.habitaclia.com/alquiler-oficinas-en-malaga.htm' },
+    ],
+    tip: 'Revisión rápida — 5 minutos máximo. Si no hay nada nuevo en primera página, siguiente portal.',
+  },
+  {
+    id: 'yaencontre',
+    nombre: 'Yaencontre',
+    desc: 'Menor volumen pero anuncios únicos',
+    icon: '🔎',
+    iconBg: '#e0f2fe',
+    priority: 'media',
+    tiempo: '6 min',
+    searches: [
+      { label: 'Locales · venta · Málaga · Particulares', tag: 'local venta', url: 'https://www.yaencontre.com/venta/locales/malaga?anunciante=particular' },
+      { label: 'Locales · alquiler · Málaga · Particulares', tag: 'local alquiler', url: 'https://www.yaencontre.com/alquiler/locales/malaga?anunciante=particular' },
+      { label: 'Naves · venta · Málaga', tag: 'nave venta', url: 'https://www.yaencontre.com/venta/naves/malaga' },
+      { label: 'Oficinas · venta · Málaga', tag: 'oficina', url: 'https://www.yaencontre.com/venta/oficinas/malaga' },
+    ],
+    tip: 'A veces aparecen activos únicos que no están en ningún otro portal. Vale la pena revisar aunque sea rápido.',
+  },
+  {
+    id: 'indomio',
+    nombre: 'Indomio',
+    desc: 'Agregador — detecta lo que se te escapó en T1',
+    icon: '🗂',
+    iconBg: '#f3e8ff',
+    priority: 'media',
+    tiempo: '5 min',
+    searches: [
+      { label: 'Locales · venta · Málaga', tag: 'local venta', url: 'https://www.indomio.es/locales/en-venta/malaga/' },
+      { label: 'Locales · alquiler · Málaga', tag: 'local alquiler', url: 'https://www.indomio.es/locales/en-alquiler/malaga/' },
+      { label: 'Naves · Málaga', tag: 'nave', url: 'https://www.indomio.es/naves/en-venta/malaga/' },
+      { label: 'Oficinas · Málaga', tag: 'oficina', url: 'https://www.indomio.es/oficinas/en-venta/malaga/' },
+    ],
+    tip: 'Agrega anuncios de varios portales. Útil para cazar lo que se escapó en T1. Marca los duplicados en tus notas para no procesarlos dos veces.',
+  },
+  {
+    id: 'fbmarketplace',
+    nombre: 'Facebook Marketplace',
+    desc: 'Propietario directo puro — sin portal, sin agencia',
+    icon: '🛒',
+    iconBg: '#dbeafe',
+    priority: 'media',
+    tiempo: '8 min',
+    searches: [
+      { label: 'Local comercial · Málaga', tag: 'local', url: 'https://www.facebook.com/marketplace/malaga/search/?query=local%20comercial&exact=false' },
+      { label: 'Nave industrial · Málaga', tag: 'nave', url: 'https://www.facebook.com/marketplace/malaga/search/?query=nave%20industrial&exact=false' },
+      { label: 'Oficina · alquiler · Málaga', tag: 'oficina', url: 'https://www.facebook.com/marketplace/malaga/search/?query=oficina%20alquiler&exact=false' },
+      { label: 'Local · Axarquía · Vélez', tag: 'local axarquia', url: 'https://www.facebook.com/marketplace/velez-malaga/search/?query=local%20comercial&exact=false' },
+    ],
+    tip: 'Requiere estar logada en Facebook. Ordena SIEMPRE por "Más recientes". Todos los anunciantes aquí son particulares — es la mejor fuente sin filtrar.',
+  },
+];
+
+const GRUPOS_FB = [
+  { nombre: 'Compra Venta Alquiler Locales Málaga', desc: 'Grupo activo de propietarios directos', busqueda: 'local comercial alquiler venta' },
+  { nombre: 'Naves Industriales Málaga y Provincia', desc: 'Naves en polígonos, propietarios y empresas', busqueda: 'nave industrial alquiler venta' },
+  { nombre: 'Inmuebles Axarquía', desc: 'Toda la comarca — locales, naves, locales', busqueda: 'local nave comercial' },
+  { nombre: 'Compra Venta Vélez-Málaga y Comarca', desc: 'Zona Axarquía capital', busqueda: 'local nave venta alquiler' },
+  { nombre: 'Anuncios Málaga — Inmuebles', desc: 'Grupo general Málaga capital', busqueda: 'local comercial nave industrial' },
+];
+
+const ALERTAS_GOOGLE = [
+  { termino: '"local comercial" "Málaga" "propietario"', desc: 'Locales en venta/alquiler publicados por propietario' },
+  { termino: '"nave industrial" "Málaga" "particular"', desc: 'Naves de propietario directo en Málaga' },
+  { termino: '"local" "Axarquía" "alquiler" OR "venta"', desc: 'Terciario en toda la comarca' },
+  { termino: '"traspaso local" "Málaga"', desc: 'Traspasos — propietario que quiere salir rápido' },
+  { termino: '"nave" "Vélez-Málaga" OR "Torre del Mar"', desc: 'Naves en núcleos clave de Axarquía' },
+  { termino: '"local comercial" "vendo" OR "alquilo" Málaga', desc: 'Terminología de propietario directo' },
+];
+
+// ── ESTADO DE SESIÓN ─────────────────────────────────────────────────────────
+let sesion = JSON.parse(localStorage.getItem('dn_prospeccion_sesion') || '{}');
+let startTime = Date.now();
+let timerInterval = null;
+
+function saveSesion() {
+  localStorage.setItem('dn_prospeccion_sesion', JSON.stringify(sesion));
+}
+
+function resetSesion() {
+  if(!confirm('¿Iniciar nueva sesión? Se perderán las notas de la sesión actual.')) return;
+  sesion = {};
+  saveSesion();
+  startTime = Date.now();
+  render();
+}
+
+// ── RENDER ───────────────────────────────────────────────────────────────────
+function render() {
+  // Fecha
+  const hoy = new Date();
+  document.getElementById('fechaHoy').textContent =
+    hoy.toLocaleDateString('es-ES',{weekday:'short',day:'2-digit',month:'2-digit',year:'numeric'}).replace(',',' ·');
+
+  renderPortales('portalGrid', PORTALES_T1);
+  renderPortales('portalGrid2', PORTALES_T2);
+  renderGrupos();
+  renderAlertas();
+  updateProgress();
+  updateResumen();
+}
+
+function renderPortales(containerId, portales) {
+  const container = document.getElementById(containerId);
+  container.innerHTML = portales.map(p => {
+    const done = sesion[p.id]?.done;
+    const skip = sesion[p.id]?.skip;
+    const notas = sesion[p.id]?.notas || '';
+    const priorityLabel = p.priority === 'alta' ? 'Prioritario' : p.priority === 'social' ? 'Social' : 'Secundario';
+    const priorityClass = p.priority === 'alta' ? 'p-alta' : p.priority === 'social' ? 'p-social' : 'p-media';
+
+    return `<div class="portal-card${done?' done':''}${skip?' skipped':''}" id="card-${p.id}">
+      <div class="card-header">
+        <div class="card-icon" style="background:${p.iconBg}">${p.icon}</div>
+        <div class="card-meta">
+          <div class="card-name">${p.nombre}</div>
+          <div class="card-desc">${p.desc}</div>
+        </div>
+        <span class="card-priority ${priorityClass}">${priorityLabel}</span>
+      </div>
+
+      <div class="card-searches">
+        ${p.searches.map(s => {
+          const tagClass = s.tag.includes('nave') ? 'nave' : s.tag.includes('alquiler') ? 'alquiler' : s.tag.includes('venta') ? 'venta' : '';
+          return `<div class="search-row">
+            <span class="search-tag ${tagClass}">${s.label}</span>
+            <a href="${s.url}" target="_blank" class="btn-search" style="flex:0;padding:4px 10px;font-size:11px">🔗 Abrir</a>
+          </div>`;
+        }).join('')}
+      </div>
+
+      <div class="card-notes">
+        <div class="notes-label">Notas de esta sesión</div>
+        <textarea class="notes-input" placeholder="Leads encontrados, observaciones..." onchange="guardarNota('${p.id}', this.value)">${notas}</textarea>
+      </div>
+
+      <div style="padding:0 18px 8px;font-size:11px;color:var(--muted);font-style:italic">💡 ${p.tip}</div>
+
+      <div class="card-footer">
+        <button class="btn-done" onclick="toggleDone('${p.id}')">${done ? '✅ Revisado' : '✓ Marcar revisado'}</button>
+        <button class="btn-skip" onclick="toggleSkip('${p.id}')" title="Saltar este portal">⊘</button>
+      </div>
+    </div>`;
+  }).join('');
+}
+
+function renderGrupos() {
+  document.getElementById('groupList').innerHTML = GRUPOS_FB.map(g => `
+    <div class="group-item">
+      <div class="group-icon">👥</div>
+      <div>
+        <div class="group-name">${g.nombre}</div>
+        <div class="group-desc">${g.desc}</div>
+      </div>
+      <a href="https://www.facebook.com/search/groups/?q=${encodeURIComponent(g.nombre)}" target="_blank" class="btn-group">🔍 Buscar grupo</a>
+    </div>
+  `).join('');
+}
+
+function renderAlertas() {
+  document.getElementById('alertGrid').innerHTML = ALERTAS_GOOGLE.map(a => `
+    <div class="alert-card">
+      <div class="alert-icon">🔔</div>
+      <div>
+        <div class="alert-term">${a.termino}</div>
+        <div class="alert-desc">${a.desc}</div>
+      </div>
+      <a href="https://www.google.es/alerts#${encodeURIComponent(a.termino)}" target="_blank" class="btn-alert">Crear alerta</a>
+    </div>
+  `).join('');
+}
+
+// ── ACCIONES ─────────────────────────────────────────────────────────────────
+function toggleDone(id) {
+  if(!sesion[id]) sesion[id] = {};
+  sesion[id].done = !sesion[id].done;
+  if(sesion[id].done) sesion[id].skip = false;
+  sesion[id].doneAt = new Date().toISOString();
+  saveSesion();
+  render();
+}
+
+function toggleSkip(id) {
+  if(!sesion[id]) sesion[id] = {};
+  sesion[id].skip = !sesion[id].skip;
+  if(sesion[id].skip) sesion[id].done = false;
+  saveSesion();
+  render();
+}
+
+function guardarNota(id, val) {
+  if(!sesion[id]) sesion[id] = {};
+  sesion[id].notas = val;
+  saveSesion();
+  updateResumen();
+}
+
+// ── PROGRESO ─────────────────────────────────────────────────────────────────
+function updateProgress() {
+  const todos = [...PORTALES_T1, ...PORTALES_T2];
+  const total = todos.length;
+  const done = todos.filter(p => sesion[p.id]?.done || sesion[p.id]?.skip).length;
+  const pct = total ? Math.round((done/total)*100) : 0;
+
+  document.getElementById('progressFill').style.width = pct + '%';
+  document.getElementById('countDone').textContent = done;
+  document.getElementById('countTotal').textContent = total;
+
+  // Dots
+  document.getElementById('progressDots').innerHTML = todos.map(p => {
+    const s = sesion[p.id];
+    const cls = s?.done ? 'done' : s?.skip ? 'skip' : '';
+    return `<div class="step-dot ${cls}" title="${p.nombre}"></div>`;
+  }).join('');
+}
+
+function updateResumen() {
+  const todos = [...PORTALES_T1, ...PORTALES_T2];
+  const revisados = todos.filter(p => sesion[p.id]?.done).length;
+  const pendientes = todos.filter(p => !sesion[p.id]?.done && !sesion[p.id]?.skip).length;
+
+  // Contar leads en notas (líneas con texto)
+  let leads = 0;
+  todos.forEach(p => {
+    const n = sesion[p.id]?.notas || '';
+    if(n.trim()) leads += n.trim().split('\n').filter(l=>l.trim()).length;
+  });
+
+  const mins = Math.floor((Date.now() - startTime) / 60000);
+
+  document.getElementById('rFuentes').textContent = revisados;
+  document.getElementById('rLeads').textContent = leads;
+  document.getElementById('rTiempo').textContent = mins + "'";
+  document.getElementById('rPendientes').textContent = pendientes;
+}
+
+// ── EXPORTAR ─────────────────────────────────────────────────────────────────
+function exportarResumen() {
+  const todos = [...PORTALES_T1, ...PORTALES_T2];
+  const hoy = new Date().toLocaleDateString('es-ES');
+  let txt = `RESUMEN SESIÓN PROSPECCIÓN · DíazNovel Inmobiliaria\n`;
+  txt += `Fecha: ${hoy}\n`;
+  txt += `${'─'.repeat(50)}\n\n`;
+
+  todos.forEach(p => {
+    const s = sesion[p.id];
+    const estado = s?.done ? '✅ REVISADO' : s?.skip ? '⊘ SALTADO' : '⬜ PENDIENTE';
+    txt += `${estado} · ${p.nombre}\n`;
+    if(s?.notas?.trim()) {
+      txt += `Notas:\n${s.notas.trim().split('\n').map(l=>'  · '+l).join('\n')}\n`;
+    }
+    txt += '\n';
+  });
+
+  const blob = new Blob([txt], {type:'text/plain;charset=utf-8'});
+  const url = URL.createObjectURL(blob);
+  const a = document.createElement('a');
+  a.href = url;
+  a.download = `prospeccion_${new Date().toISOString().slice(0,10)}.txt`;
+  document.body.appendChild(a); a.click();
+  setTimeout(()=>{ document.body.removeChild(a); URL.revokeObjectURL(url); }, 1000);
+}
+
+function abrirCRM() {
+  alert('Abre el CRM en la pestaña correspondiente y añade los leads encontrados en la pestaña Prospección.');
+}
+
+// ── TIMER ────────────────────────────────────────────────────────────────────
+timerInterval = setInterval(updateResumen, 30000); // actualiza cada 30s
+
+// ── INIT ─────────────────────────────────────────────────────────────────────
+render();
+</script>
+</body>
+</html>
